@@ -1,35 +1,36 @@
 import axios from 'axios';
 
-const API_KEY = process.env.REACT_APP_OPENWEATHER_API_KEY;
-const BASE_URL = 'https://api.openweathermap.org/data/2.5';
+const BASE_URL = 'http://localhost:5001/api';
 
 export const getWeatherByCity = async (city) => {
   try {
-    const response = await axios.get(`${BASE_URL}/weather`, {
-      params: {
-        q: city,
-        appid: API_KEY,
-        units: 'metric',
-      },
-    });
+    const response = await axios.get(`${BASE_URL}/weather/${city}`);
     return response.data;
   } catch (error) {
+    console.error('Weather fetch error:', error);
     throw new Error(error.response?.data?.message || 'Failed to fetch weather data');
   }
 };
 
+export const getForecastByCity = async (city) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/forecast/${city}`);
+    return response.data;
+  } catch (error) {
+    console.error('Forecast fetch error:', error);
+    throw new Error(error.response?.data?.message || 'Failed to fetch forecast data');
+  }
+};
+
+// Optional: Keep this if you need coordinate-based weather
 export const getWeatherByCoordinates = async (lat, lon) => {
   try {
     const response = await axios.get(`${BASE_URL}/weather`, {
-      params: {
-        lat,
-        lon,
-        appid: API_KEY,
-        units: 'metric',
-      },
+      params: { lat, lon }
     });
     return response.data;
   } catch (error) {
+    console.error('Weather fetch error:', error);
     throw new Error(error.response?.data?.message || 'Failed to fetch weather data');
   }
 }; 
